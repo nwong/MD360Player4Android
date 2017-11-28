@@ -23,17 +23,31 @@ public class DomeProjection extends AbsProjectionStrategy {
 
     private boolean mIsUpper;
 
+    private boolean mIsInside;
+
     private RectF mTextureSize;
 
     public DomeProjection(RectF textureSize, float degree, boolean isUpper) {
         this.mTextureSize = textureSize;
         this.mDegree = degree;
         this.mIsUpper = isUpper;
+        this.mIsInside = false;
+    }
+
+    public DomeProjection(RectF textureSize, float degree, boolean isUpper, boolean isInside) {
+        this.mTextureSize = textureSize;
+        this.mDegree = degree;
+        this.mIsUpper = isUpper;
+        this.mIsInside = isInside;
     }
 
     @Override
     public void turnOnInGL(Context context) {
-        object3D = new MDDome3D(mTextureSize, mDegree, mIsUpper);
+        if (this.mIsInside) {
+            object3D = new MDDome3D(mTextureSize, mDegree, mIsUpper, true);
+        } else {
+            object3D = new MDDome3D(mTextureSize, mDegree, mIsUpper);
+        }
         MDObject3DHelper.loadObj(context, object3D);
     }
 

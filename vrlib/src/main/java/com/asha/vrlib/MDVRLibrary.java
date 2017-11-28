@@ -69,6 +69,8 @@ public class MDVRLibrary {
     public static final int PROJECTION_MODE_DOME230 = 203;
     public static final int PROJECTION_MODE_DOME180_UPPER = 204;
     public static final int PROJECTION_MODE_DOME230_UPPER = 205;
+
+    public static final int PROJECTION_MODE_DOME180_INSIDE = 2020;
     /**
      * @deprecated since 2.0.4
      * use {@link #PROJECTION_MODE_STEREO_SPHERE_VERTICAL}

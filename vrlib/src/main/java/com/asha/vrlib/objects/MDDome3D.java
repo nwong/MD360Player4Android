@@ -21,6 +21,8 @@ public class MDDome3D extends MDAbsObject3D {
 
     boolean mIsUpper;
 
+    boolean mIsInside;
+
     RectF mTextureSize;
 
     float mPrevRatio = 1;
@@ -31,6 +33,14 @@ public class MDDome3D extends MDAbsObject3D {
         this.mTextureSize = textureSize;
         this.mDegree = degree;
         this.mIsUpper = isUpper;
+        this.mIsInside = false;
+    }
+
+    public MDDome3D(RectF textureSize, float degree, boolean isUpper, boolean isInside) {
+        this.mTextureSize = textureSize;
+        this.mDegree = degree;
+        this.mIsUpper = isUpper;
+        this.mIsInside = isInside;
     }
 
     @Override
@@ -108,7 +118,7 @@ public class MDDome3D extends MDAbsObject3D {
                 texcoords[t++] = b;
                 texcoords[t++] = a;
 
-                vertexs[v++] = x * radius;
+                vertexs[v++] = -x * radius;
                 vertexs[v++] = y * radius;
                 vertexs[v++] = z * radius;
             }
@@ -117,12 +127,22 @@ public class MDDome3D extends MDAbsObject3D {
         int counter = 0;
         for(r = 0; r < lenRings - 1; r++){
             for(s = 0; s < lenSectors - 1; s++) {
-                indices[counter++] = (short) (r * lenSectors + s);       //(a)
-                indices[counter++] = (short) ((r+1) * lenSectors + (s));    //(b)
-                indices[counter++] = (short) ((r) * lenSectors + (s+1));  // (c)
-                indices[counter++] = (short) ((r) * lenSectors + (s+1));  // (c)
-                indices[counter++] = (short) ((r+1) * lenSectors + (s));    //(b)
-                indices[counter++] = (short) ((r+1) * lenSectors + (s+1));  // (d)
+                if (object3D.mIsInside) {
+                    // When viewing dome from inside, vertically flip texture
+                    indices[counter++] = (short) ((r + 1) * lenSectors + (s));      // (b)
+                    indices[counter++] = (short) (r * lenSectors + s);              // (c)
+                    indices[counter++] = (short) ((r) * lenSectors + (s+1));        // (a)
+                    indices[counter++] = (short) ((r+1) * lenSectors + (s+1));      // (d)
+                    indices[counter++] = (short) ((r+1) * lenSectors + (s));        // (b)
+                    indices[counter++] = (short) ((r) * lenSectors + (s + 1));      // (a)
+                } else {
+                    indices[counter++] = (short) (r * lenSectors + s);              // (a)
+                    indices[counter++] = (short) ((r+1) * lenSectors + (s));        // (b)
+                    indices[counter++] = (short) ((r) * lenSectors + (s+1));        // (c)
+                    indices[counter++] = (short) ((r) * lenSectors + (s+1));        // (c)
+                    indices[counter++] = (short) ((r+1) * lenSectors + (s));        // (b)
+                    indices[counter++] = (short) ((r+1) * lenSectors + (s+1));      // (d)
+                }
             }
         }
 
