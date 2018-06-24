@@ -113,6 +113,11 @@ public class ProjectionModeManager extends ModeManager<AbsProjectionStrategy> im
         switch (mode){
             case MDVRLibrary.PROJECTION_MODE_DOME180:
                 return new DomeProjection(this.mTextureSize,180f,false);
+
+            // When viewing dome from inside, vertically flip texture
+            case MDVRLibrary.PROJECTION_MODE_DOME180_INSIDE:
+                return new DomeProjection(this.mTextureSize,180f,false, true);
+
             case MDVRLibrary.PROJECTION_MODE_DOME230:
                 return new DomeProjection(this.mTextureSize,230f,false);
             case MDVRLibrary.PROJECTION_MODE_DOME180_UPPER:
